@@ -1,0 +1,8 @@
+"LZero"= 26.82
+"LOne"= 71.58
+"LTwo"= 64.7
+
+
+"ThetaZero"= 90
+"ThetaOne"= 34.75
+"ThetaTwo"= 123.44
