@@ -55,6 +55,7 @@ startNewPlayback = True
 
 
 while 1:
+	#Note I dont have to worry about timing for playback. this is because this main loop is clocked consistently by the input unit
 	
 	serInput.readline()		#should hold until new packet
 	serInput.flushInput()
