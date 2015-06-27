@@ -19,7 +19,7 @@ myo input ranges
 SerialCommand sCmd;
 
 #define PACKET_LEN 4
-#define MOTOR_DELAY 2
+#define MOTOR_DELAY 10
 
 long now, lastMotorWrite = 0;
 bool inputReceived = false;
@@ -41,8 +41,10 @@ void setup(void)
   servo2.write(160);
   servo3.write(0);
   
+  pinMode(13, OUTPUT);
   
-  sCmd.addCommand("g", processPacket);
+  sCmd.addCommand("g", processMyo);
+  sCmd.addCommand("c", processCMM);
   sCmd.setDefaultHandler(unrecognisedCommand);
   
   Serial.begin(9600);
@@ -70,12 +72,7 @@ void loop(void)
     //do mapping
     if(inputReceived)
     {
-      input[0] = map(input[0] ,0,90,85,175);
-      input[1] = map(input[1],25,0,5,90);
       
-      if (input[2]==1) input[2] = 140;
-      else if (input[2]==2) input[2] = 10;
-      else input[2] = servo3.read();
       
       /* bounds check *
       for(int i = 0; i < 3; i++)
@@ -105,7 +102,21 @@ void loop(void)
   
 }
 
-void processPacket()
+void processCMM()
+{
+  for(int i = 0; i < PACKET_LEN; i++)
+    {
+      input[i] = atof(sCmd.next());
+    }
+    /*
+    digitalWrite(13, HIGH);
+    delay(100);
+    digitalWrite(13, LOW);
+    */
+    inputReceived = true;
+}
+
+void processMyo()
 {
     for(int i = 0; i < PACKET_LEN; i++)
     {
@@ -119,6 +130,14 @@ void processPacket()
       Serial.print(" ");
     }
     Serial.println();
+    
+    input[0] = map(input[0] ,0,90,85,175);
+    input[1] = map(input[1],25,0,5,90);
+    
+    if (input[2]==1) input[2] = 140;
+    else if (input[2]==2) input[2] = 10;
+    else input[2] = servo3.read();
+    
     inputReceived = true;
 }
 
