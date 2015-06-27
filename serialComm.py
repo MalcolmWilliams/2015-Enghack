@@ -1,21 +1,5 @@
-# python import test
-#import serial 
-
-'''
-
-Discov3ry Standalone GUI
-
-Simple Python GUI to control the Discov3ry paste extruder.
-
-Created by Malcolm Williams
-Date June 8th 2015
-
-'''
-
 import serial
-import easygui
-import datetime
-
+import time
 
 def startSerial(ser, port):
 	ser.baudrate = 9600
@@ -44,30 +28,27 @@ def sendSerial(ser, array):
 	#print "tx:", toSend
 
 ser = serial.Serial()
-startSerial(ser, "COM17")
+startSerial(ser, "COM18")
 
+f = open("output.txt", "r")
+
+
+''' example usage '''
 
 while(1):
+
+	while 1:
+		temp = f.readline()
+		#sendSerial(ser, temp)
+		ser.write("g " + temp)
+		time.sleep(0.001)
+		if(ser.inWaiting() != 0):
+			print "rx:", readSerial(ser)
+
+	'''
 	sendSerial(ser, ["1", "2", "3", "4"])
 
-	if(ser.inWaiting() != 0):
-		print "rx:", readSerial(ser)
+	
 
 ser.close()
-
-'''
-
-filename = "fifo.tmp"
-
-
-
-# Block until writer finishes...
-with open(filename, 'r') as f:
-    data = f.read()
-
-# Split data into an array
-array = [int(x) for x in data.split()]
-
-print array
-
 '''

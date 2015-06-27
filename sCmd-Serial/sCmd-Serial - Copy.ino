@@ -53,25 +53,20 @@ void loop(void)
 { 
   now = millis();
   
-  /*
   if(Serial.available() > 0)
   {
     sCmd.readSerial();
   }
-  */
   Serial.flush();
-  while(Serial.available() == 0);
- 
-  sCmd.readSerial();
   
-  if((now - lastMotorWrite) >= MOTOR_DELAY)
+  if(now - lastMotorWrite >= MOTOR_DELAY)
   {
     lastMotorWrite = now;
     //do mapping
     if(inputReceived)
     {
-      input[0] = map(input[0] ,0,90,85,175);
-      input[1] = map(input[1],25,0,5,90);
+      input[0] = map(input[0] ,90,0,85,175);
+      input[1] = map(input[1],0,25,5,90);
       
       if (input[2]==1) input[2] = 140;
       else if (input[2]==2) input[2] = 10;
